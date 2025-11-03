@@ -17,7 +17,7 @@ public class MainPlayer : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Cold += ColdIncrease * Time.deltaTime; // ökar med 1 per sekund
+        Cold += ColdIncrease * Time.deltaTime;
         Cold = Mathf.Clamp(Cold, 0, MaxCold);
 
         ColdBar.SetCold(Cold);

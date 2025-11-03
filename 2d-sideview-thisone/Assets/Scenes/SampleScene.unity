@@ -1029,7 +1029,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 4733640}
   warmRange: 5
-  warmMultiplier: -1
+  warmMultiplier: -4
 --- !u!58 &1370478286
 CircleCollider2D:
   m_ObjectHideFlags: 0

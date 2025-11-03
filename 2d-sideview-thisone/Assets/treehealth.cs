@@ -1,7 +1,8 @@
 using UnityEngine;
 
-public class Axebehaviour : MonoBehaviour
+public class treehealth : MonoBehaviour
 {
+    public int health = 10;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {

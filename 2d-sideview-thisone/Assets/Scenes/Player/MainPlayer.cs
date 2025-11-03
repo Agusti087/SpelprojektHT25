@@ -3,7 +3,7 @@ using UnityEngine.UI;
 
 public class MainPlayer : MonoBehaviour
 {
-    public float Cold, MaxCold;
+    public float Cold, MaxCold, ColdIncrease;
 
     [SerializeField]
     private BarBehaviour ColdBar;
@@ -17,7 +17,7 @@ public class MainPlayer : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Cold += 1 * Time.deltaTime; // ökar med 1 per sekund
+        Cold += ColdIncrease * Time.deltaTime; // ökar med 1 per sekund
         Cold = Mathf.Clamp(Cold, 0, MaxCold);
 
         ColdBar.SetCold(Cold);

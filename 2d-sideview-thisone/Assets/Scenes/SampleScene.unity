@@ -332,6 +332,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Cold: 0
   MaxCold: 100
+  ColdIncrease: 1
   ColdBar: {fileID: 1008691588}
 --- !u!1 &51300082
 GameObject:

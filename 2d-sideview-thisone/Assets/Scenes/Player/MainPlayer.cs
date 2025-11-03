@@ -1,0 +1,25 @@
+using UnityEngine;
+using UnityEngine.UI;
+
+public class MainPlayer : MonoBehaviour
+{
+    public float Cold, MaxCold;
+
+    [SerializeField]
+    private BarBehaviour ColdBar;
+
+    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    void Start()
+    {
+        ColdBar.SetMaxCold(MaxCold);
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        Cold += 1 * Time.deltaTime; // ökar med 1 per sekund
+        Cold = Mathf.Clamp(Cold, 0, MaxCold);
+
+        ColdBar.SetCold(Cold);
+    }
+}

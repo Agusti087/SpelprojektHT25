@@ -19,6 +19,7 @@ public class Axe : MonoBehaviour
     {
         if (collision.CompareTag("trees"))
         {
+            
             print("gröna beanaise");
         }
     }

@@ -7,26 +7,32 @@ public class CampFire : MonoBehaviour
     [SerializeField] private float warmMultiplier = -1f;
     [SerializeField] private int requiredLogs = 3;
     [SerializeField] private float burnTime = 30f;
+    [SerializeField] private FireBarBehaviour fireBar; // Dra in baren från scenen här
+    [SerializeField] private Vector3 barOffset = new Vector3(0, 2f, 0);
 
     private float originalColdIncrease;
     private bool isLit = false;
     private float burnTimer = 0f;
+    private Camera mainCam;
 
     void Start()
     {
         originalColdIncrease = player.ColdIncrease;
+        mainCam = Camera.main;
     }
 
     void Update()
     {
+        float distance = Vector3.Distance(transform.position, player.transform.position);
+
         if (!isLit && Input.GetKeyDown(KeyCode.E))
         {
-            float distance = Vector3.Distance(transform.position, player.transform.position);
             if (distance <= warmRange && player.Logs >= requiredLogs)
             {
                 player.Logs -= requiredLogs;
                 isLit = true;
                 burnTimer = burnTime;
+                fireBar.SetMaxBurnTime(burnTime);
             }
         }
 
@@ -37,17 +43,18 @@ public class CampFire : MonoBehaviour
             {
                 isLit = false;
                 player.ColdIncrease = originalColdIncrease;
+                burnTimer = 0f;
             }
         }
 
-        float currentDistance = Vector3.Distance(transform.position, player.transform.position);
-        if (isLit && currentDistance <= warmRange)
-        {
+        if (isLit && distance <= warmRange)
             player.ColdIncrease = Mathf.Abs(originalColdIncrease) * warmMultiplier;
-        }
-        else if (!isLit || currentDistance > warmRange)
-        {
+        else
             player.ColdIncrease = originalColdIncrease;
+
+        if (fireBar != null)
+        {
+            fireBar.SetBurnTime(burnTimer);
         }
     }
 }

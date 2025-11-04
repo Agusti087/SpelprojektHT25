@@ -3,30 +3,58 @@
 public class CampFire : MonoBehaviour
 {
     [SerializeField] private MainPlayer player;
-    [SerializeField] private float warmRange = 5f; // hur nära man måste vara
-    [SerializeField] private float warmMultiplier = -1f; // multipliceras med spelarens ColdIncrease när spelaren är nära
+    [SerializeField] private float warmRange = 5f;
+    [SerializeField] private float warmMultiplier = -1f;
+    [SerializeField] private int requiredLogs = 3;
+    [SerializeField] private float burnTime = 30f;
+    [SerializeField] private FireBarBehaviour fireBar; // Dra in baren från scenen här
+    [SerializeField] private Vector3 barOffset = new Vector3(0, 2f, 0);
 
-    private float originalColdIncrease; // lagra spelarens normala värde
+    private float originalColdIncrease;
+    private bool isLit = false;
+    private float burnTimer = 0f;
+    private Camera mainCam;
 
     void Start()
     {
-        // Spara spelarens ursprungliga ColdIncrease
         originalColdIncrease = player.ColdIncrease;
+        mainCam = Camera.main;
     }
 
     void Update()
     {
         float distance = Vector3.Distance(transform.position, player.transform.position);
 
-        if (distance <= warmRange)
+        if (!isLit && Input.GetKeyDown(KeyCode.E))
         {
-            // Spelaren är nära elden → använd negativ version
-            player.ColdIncrease = Mathf.Abs(originalColdIncrease) * warmMultiplier;
+            if (distance <= warmRange && player.Logs >= requiredLogs)
+            {
+                player.Logs -= requiredLogs;
+                isLit = true;
+                burnTimer = burnTime;
+                fireBar.SetMaxBurnTime(burnTime);
+            }
         }
-        else
+
+        if (isLit)
         {
-            // För långt bort → återställ till normalt värde
+            burnTimer -= Time.deltaTime;
+            if (burnTimer <= 0f)
+            {
+                isLit = false;
+                player.ColdIncrease = originalColdIncrease;
+                burnTimer = 0f;
+            }
+        }
+
+        if (isLit && distance <= warmRange)
+            player.ColdIncrease = Mathf.Abs(originalColdIncrease) * warmMultiplier;
+        else
             player.ColdIncrease = originalColdIncrease;
+
+        if (fireBar != null)
+        {
+            fireBar.SetBurnTime(burnTimer);
         }
     }
 }

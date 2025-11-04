@@ -3,29 +3,50 @@
 public class CampFire : MonoBehaviour
 {
     [SerializeField] private MainPlayer player;
-    [SerializeField] private float warmRange = 5f; // hur nära man måste vara
-    [SerializeField] private float warmMultiplier = -1f; // multipliceras med spelarens ColdIncrease när spelaren är nära
+    [SerializeField] private float warmRange = 5f;
+    [SerializeField] private float warmMultiplier = -1f;
+    [SerializeField] private int requiredLogs = 3;
+    [SerializeField] private float burnTime = 30f;
 
-    private float originalColdIncrease; // lagra spelarens normala värde
+    private float originalColdIncrease;
+    private bool isLit = false;
+    private float burnTimer = 0f;
 
     void Start()
     {
-        // Spara spelarens ursprungliga ColdIncrease
         originalColdIncrease = player.ColdIncrease;
     }
 
     void Update()
     {
-        float distance = Vector3.Distance(transform.position, player.transform.position);
-
-        if (distance <= warmRange)
+        if (!isLit && Input.GetKeyDown(KeyCode.E))
         {
-            // Spelaren är nära elden → använd negativ version
+            float distance = Vector3.Distance(transform.position, player.transform.position);
+            if (distance <= warmRange && player.Logs >= requiredLogs)
+            {
+                player.Logs -= requiredLogs;
+                isLit = true;
+                burnTimer = burnTime;
+            }
+        }
+
+        if (isLit)
+        {
+            burnTimer -= Time.deltaTime;
+            if (burnTimer <= 0f)
+            {
+                isLit = false;
+                player.ColdIncrease = originalColdIncrease;
+            }
+        }
+
+        float currentDistance = Vector3.Distance(transform.position, player.transform.position);
+        if (isLit && currentDistance <= warmRange)
+        {
             player.ColdIncrease = Mathf.Abs(originalColdIncrease) * warmMultiplier;
         }
-        else
+        else if (!isLit || currentDistance > warmRange)
         {
-            // För långt bort → återställ till normalt värde
             player.ColdIncrease = originalColdIncrease;
         }
     }

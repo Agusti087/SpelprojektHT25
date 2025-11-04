@@ -9,7 +9,7 @@ public class MainUIscript : MonoBehaviour
     void Update()
     {
         // När man trycker på E
-        if (Input.GetKeyDown(KeyCode.E))
+        if (Input.GetKeyDown(KeyCode.Escape))
         {
             menuVisible = !menuVisible; // växla mellan true/false
 

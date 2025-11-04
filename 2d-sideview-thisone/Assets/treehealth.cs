@@ -3,6 +3,7 @@ using UnityEngine;
 public class treehealth : MonoBehaviour
 {
     public int health = 10;
+    public bool istrigger;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -12,6 +13,22 @@ public class treehealth : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if (health <= 0)
+        {
+            Destroy(gameObject);
+        }
+        if (istrigger = true && Input.GetKeyDown(KeyCode.F))
+        {
+            health -= 5;
+        }
+    }
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.CompareTag("axe"))
+        {
+            istrigger = true;
+        }
+
     }
 }
+

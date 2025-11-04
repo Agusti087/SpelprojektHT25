@@ -19,18 +19,11 @@ public class Axe : MonoBehaviour
     {
         if (collision.CompareTag("trees"))
         {
-            chop();
+            
             print("gröna beanaise");
         }
     }
 
 
-    private void chop()
-    {
-        if (Input.GetKey(KeyCode.F))
-        {
-            print("lingonsylt");
-
-        }
-    }
+    
 }

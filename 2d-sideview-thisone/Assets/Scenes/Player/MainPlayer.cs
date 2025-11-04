@@ -18,3 +18,4 @@ public class MainPlayer : MonoBehaviour
         ColdBar.SetCold(Cold);
     }
 }
+

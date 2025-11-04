@@ -3,7 +3,7 @@ using UnityEngine;
 public class treehealth : MonoBehaviour
 {
     public int health = 10;
-    public bool istrigger;
+    public bool Collided;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -17,7 +17,7 @@ public class treehealth : MonoBehaviour
         {
             Destroy(gameObject);
         }
-        if (istrigger = true && Input.GetKeyDown(KeyCode.F))
+        if (Collided = true && Input.GetKeyDown(KeyCode.F))
         {
             health -= 5;
         }
@@ -26,7 +26,7 @@ public class treehealth : MonoBehaviour
     {
         if (collision.CompareTag("axe"))
         {
-            istrigger = true;
+            Collided = true;
         }
 
     }

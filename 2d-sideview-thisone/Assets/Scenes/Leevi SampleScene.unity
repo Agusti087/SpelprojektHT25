@@ -131,6 +131,7 @@ GameObject:
   - component: {fileID: 4733636}
   - component: {fileID: 4733635}
   - component: {fileID: 4733634}
+  - component: {fileID: 4733641}
   - component: {fileID: 4733638}
   - component: {fileID: 4733639}
   - component: {fileID: 4733640}
@@ -335,6 +336,23 @@ MonoBehaviour:
   ColdIncrease: 1
   Logs: 0
   ColdBar: {fileID: 1008691588}
+--- !u!114 &4733641
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4733632}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 28a4c0542213e504dbc51c968ac9c581, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Cold: 0
+  MaxCold: 0
+  ColdIncrease: 1
+  Logs: 0
+  ColdBar: {fileID: 0}
 --- !u!1 &51300082
 GameObject:
   m_ObjectHideFlags: 0

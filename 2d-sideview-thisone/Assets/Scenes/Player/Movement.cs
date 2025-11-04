@@ -14,6 +14,7 @@ public class Movement : MonoBehaviour
     private bool isSprinting;
     private float moveSpeedConstant = 5;
     [SerializeField] float sprintMultiplier = 1.5f;
+    private MainPlayer player;
 
 
 
@@ -21,6 +22,8 @@ public class Movement : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>(); // H�mta v�r Rigidbody 2D
         animator = GetComponent<Animator>(); // Hämta vår Animator
+
+        player = GetComponent<MainPlayer>();
     }
     private void Update()
     {
@@ -68,6 +71,10 @@ public class Movement : MonoBehaviour
         {
             moveSpeed = moveSpeedConstant;
         }
+
+        float coldPercent = player.Cold / player.MaxCold;
+        float coldFactor = Mathf.Lerp(1f, 0.7f, coldPercent); 
+        moveSpeed *= coldFactor;
     }
 
     private void Move(float direction)
@@ -83,7 +90,16 @@ public class Movement : MonoBehaviour
     }
     private void Jump()
     {
-        rb.AddForce(new Vector2(0f, jumpForce), ForceMode2D.Impulse); // L�gg till vertical force f�r att kunna hoppa
+        float adjustedJumpForce = jumpForce;
+
+        if (player != null)
+        {
+            float coldPercent = player.Cold / player.MaxCold;
+            float jumpFactor = Mathf.Lerp(1f, 0.8f, coldPercent);
+            adjustedJumpForce *= jumpFactor;
+        }
+
+        rb.AddForce(new Vector2(0f, adjustedJumpForce), ForceMode2D.Impulse);
     }
     private void Flip()
     {

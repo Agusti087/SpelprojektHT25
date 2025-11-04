@@ -3,7 +3,7 @@ using UnityEngine.UI;
 
 public class MainPlayer : MonoBehaviour
 {
-    public float Cold, MaxCold, ColdIncrease;
+    public float Cold, MaxCold, ColdIncrease, Logs;
 
     [SerializeField]
     private BarBehaviour ColdBar;

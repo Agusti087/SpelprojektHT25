@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 2208477601483613287}
   - component: {fileID: 5151546606709710964}
   m_Layer: 0
-  m_Name: Player (placeholder)
+  m_Name: PlayerPlaceHolder
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -218,6 +218,8 @@ MonoBehaviour:
   Logs: 0
   ColdBar: {fileID: 0}
   LogText: {fileID: 0}
+  AxeDamage: 5
+  CampfireCost: 15
 --- !u!1 &8137783978634973760
 GameObject:
   m_ObjectHideFlags: 0

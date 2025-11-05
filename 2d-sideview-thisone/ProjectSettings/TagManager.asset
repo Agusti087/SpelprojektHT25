@@ -6,6 +6,7 @@ TagManager:
   tags:
   - trees
   - axe
+  - CampfireBlueprint
   layers:
   - Default
   - TransparentFX

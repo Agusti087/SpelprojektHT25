@@ -4,10 +4,12 @@ using TMPro;
 
 public class MainPlayer : MonoBehaviour
 {
-    public float Cold, MaxCold, ColdIncrease, Logs;
+    public float Cold, MaxCold, ColdIncrease;
+    public int Logs;
     [SerializeField] private BarBehaviour ColdBar;
     [SerializeField] TMP_Text LogText;
     [SerializeField] public int AxeDamage;
+    [SerializeField] public int CampfireCost;
 
     
 

@@ -17,7 +17,7 @@ public class treehealth : MonoBehaviour
         {
             Destroy(gameObject);
         }
-        if (Collided = true && Input.GetKeyDown(KeyCode.F))
+        if (Collided == true && Input.GetKeyDown(KeyCode.F))
         {
             health -= 5;
         }
@@ -28,7 +28,23 @@ public class treehealth : MonoBehaviour
         {
             Collided = true;
         }
-
+       /* else
+        {
+            TreeCollision();
+        }*/
+    }
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.CompareTag("axe"))
+        {
+            Collided = false;
+        }
+    }
+    void TreeCollision()
+    {
+        
+            Collided = false;
+        
     }
 }
 

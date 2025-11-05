@@ -6545,7 +6545,6 @@ MonoBehaviour:
   requiredLogs: 0
   burnTime: 30
   fireBar: {fileID: 979321880}
-  barOffset: {x: 0, y: 0, z: 0}
 --- !u!58 &2022223991
 CircleCollider2D:
   m_ObjectHideFlags: 0

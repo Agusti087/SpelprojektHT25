@@ -16,6 +16,14 @@ public class MainPlayer : MonoBehaviour
         Cold += ColdIncrease * Time.deltaTime;
         Cold = Mathf.Clamp(Cold, 0, MaxCold);
         ColdBar.SetCold(Cold);
+        if (Cold >= MaxCold)
+        {
+            Die();
+        }
+    }
+
+    void Die()
+    {
+        Destroy(gameObject);
     }
 }
-

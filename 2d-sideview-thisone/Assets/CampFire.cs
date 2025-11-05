@@ -4,31 +4,26 @@ public class CampFire : MonoBehaviour
 {
     [SerializeField] private MainPlayer player;
     [SerializeField] private float warmRange = 5f;
-    [SerializeField] private float maxWarmMultiplier = -1f;
+    [SerializeField] private float maxWarmMultiplier = -4f; // konstant värmeeffekt
     [SerializeField] private int requiredLogs = 3;
     [SerializeField] private float burnTime = 30f;
     [SerializeField] private FireBarBehaviour fireBar;
-    [SerializeField] private Vector3 barOffset = new Vector3(0, 2f, 0);
 
-    private float originalColdIncrease;
     private bool isLit = false;
     private float burnTimer = 0f;
-    private float maxBurnTime;
-    private Camera mainCam;
-
-    private float FireStrength => Mathf.Clamp01(burnTimer / maxBurnTime);
+    private float baselineColdIncrease; // konstant referensvärde
 
     void Start()
     {
-        originalColdIncrease = player.ColdIncrease;
-        mainCam = Camera.main;
-        maxBurnTime = burnTime;
+        baselineColdIncrease = player.ColdIncrease; // spara spelarens baseline
+        fireBar?.SetMaxBurnTime(burnTime);
     }
 
     void Update()
     {
         float distance = Vector3.Distance(transform.position, player.transform.position);
 
+        // Tänd eller lägg på ved
         if (Input.GetKeyDown(KeyCode.Q) && distance <= warmRange)
         {
             if (!isLit)
@@ -37,6 +32,7 @@ public class CampFire : MonoBehaviour
                 TryAddLogs();
         }
 
+        // Nedbränning
         if (isLit)
         {
             burnTimer -= Time.deltaTime;
@@ -44,20 +40,17 @@ public class CampFire : MonoBehaviour
             {
                 isLit = false;
                 burnTimer = 0f;
-                player.ColdIncrease = originalColdIncrease;
             }
         }
 
+        // Värmeeffekt – konstant när elden är tänd
         if (isLit && distance <= warmRange)
         {
-           
-            float warmth = Mathf.Lerp(originalColdIncrease, maxWarmMultiplier, FireStrength);
-            player.ColdIncrease = warmth;
+            player.ColdIncrease = maxWarmMultiplier;
         }
         else
         {
-            
-            player.ColdIncrease = originalColdIncrease;
+            player.ColdIncrease = baselineColdIncrease;
         }
 
         fireBar?.SetBurnTime(burnTimer);
@@ -70,7 +63,6 @@ public class CampFire : MonoBehaviour
             player.Logs -= requiredLogs;
             isLit = true;
             burnTimer = burnTime;
-            maxBurnTime = burnTime;
             fireBar?.SetMaxBurnTime(burnTime);
         }
     }
@@ -83,11 +75,10 @@ public class CampFire : MonoBehaviour
         if (player.Logs > 0)
             player.Logs--;
 
-        float addMultiplier = Mathf.Lerp(1.2f, 0.5f, FireStrength);
-        float addedBurnTime = (burnTime / Mathf.Max(1, requiredLogs)) * addMultiplier;
-
+        // Lägg på en fast mängd burnTime per ved istället för multipel baserat på FireStrength
+        float addedBurnTime = burnTime / Mathf.Max(1, requiredLogs);
         burnTimer += addedBurnTime;
-        burnTimer = Mathf.Min(burnTimer, maxBurnTime);
+        burnTimer = Mathf.Min(burnTimer, burnTime);
 
         if (!isLit && burnTimer > 0f)
             isLit = true;

@@ -5532,8 +5532,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b58676e01ea231243bc31a52f4385409, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  BurnTime: 0
-  MaxBurnTime: 30
+  BurnTime: 100
+  MaxBurnTime: 100
+  Width: 100
+  Height: 20
   FillBar: {fileID: 979321883}
 --- !u!114 &979321881
 MonoBehaviour:
@@ -6541,10 +6543,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 1024115899}
   warmRange: 10
-  maxWarmMultiplier: -4
-  requiredLogs: 0
-  burnTime: 30
+  warmMultiplier: -4
+  requiredLogs: 3
+  burnTime: 100
   fireBar: {fileID: 979321880}
+  barOffset: {x: 0, y: 0, z: 0}
 --- !u!58 &2022223991
 CircleCollider2D:
   m_ObjectHideFlags: 0

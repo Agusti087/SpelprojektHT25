@@ -50,11 +50,13 @@ public class CampFire : MonoBehaviour
 
         if (isLit && distance <= warmRange)
         {
+           
             float warmth = Mathf.Lerp(originalColdIncrease, maxWarmMultiplier, FireStrength);
             player.ColdIncrease = warmth;
         }
         else
         {
+            
             player.ColdIncrease = originalColdIncrease;
         }
 

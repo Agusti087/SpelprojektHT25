@@ -6541,7 +6541,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 1024115899}
   warmRange: 10
-  warmMultiplier: -4
+  maxWarmMultiplier: -4
   requiredLogs: 0
   burnTime: 30
   fireBar: {fileID: 979321880}

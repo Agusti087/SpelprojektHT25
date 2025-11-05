@@ -25,7 +25,7 @@ public class CampFire : MonoBehaviour
     {
         float distance = Vector3.Distance(transform.position, player.transform.position);
 
-        if (!isLit && Input.GetKeyDown(KeyCode.E))
+        if (!isLit && Input.GetKeyDown(KeyCode.Q))
         {
             if (distance <= warmRange && player.Logs >= requiredLogs)
             {
@@ -48,9 +48,14 @@ public class CampFire : MonoBehaviour
         }
 
         if (isLit && distance <= warmRange)
-            player.ColdIncrease = Mathf.Abs(originalColdIncrease) * warmMultiplier;
+        {
+            // Elden är tänd och spelaren är nära
+            player.ColdIncrease = -Mathf.Abs(originalColdIncrease) * 0.5f; // halverad kyla
+        }
         else
+        {
             player.ColdIncrease = originalColdIncrease;
+        }
 
         if (fireBar != null)
         {

@@ -25,7 +25,7 @@ public class treehealth : MonoBehaviour
         }
         if (Collided == true && Input.GetKeyDown(KeyCode.F))
         {
-            health -= 5;
+            health -= player.AxeDamage;
         }
     }
     private void OnTriggerEnter2D(Collider2D collision)

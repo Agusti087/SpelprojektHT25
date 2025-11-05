@@ -15,14 +15,7 @@ public class Axe : MonoBehaviour
     {
         
     }
-    private void OnTriggerEnter2D(Collider2D collision) //aktiveras varje gång något kolliderar med objektet
-    {
-        if (collision.CompareTag("trees"))
-        {
-            
-            print("gröna beanaise");
-        }
-    }
+    
 
 
     

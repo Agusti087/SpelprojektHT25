@@ -25,7 +25,7 @@ public class MainUIscript : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.E))
+        if (Input.GetKeyDown(KeyCode.Escape))
         {
             menuVisible = !menuVisible;
             Vector2 newPos = menu.anchoredPosition;

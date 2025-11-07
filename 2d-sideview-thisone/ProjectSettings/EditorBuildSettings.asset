@@ -6,7 +6,7 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/MainMenu.unity
+    path: Assets/Scenes/MainMenu/MainMenu.unity
     guid: 6339a461947b3cd4383f50af039deb5b
   - enabled: 0
     path: Assets/Scenes/Gabou SampleScene.unity

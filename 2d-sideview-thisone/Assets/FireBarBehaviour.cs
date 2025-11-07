@@ -2,33 +2,35 @@ using UnityEngine;
 
 public class FireBarBehaviour : MonoBehaviour
 {
-    public float BurnTime, MaxBurnTime;
-    private float Width, Height;
     [SerializeField] private RectTransform FillBar;
 
-    void Start()
-    {
-        if (FillBar == null)
-        {
-            return;
-        }
+    private float maxWidth;
 
-        // Hämta den aktuella bredden/höjden på baren
-        Width = FillBar.sizeDelta.x;
-        Height = FillBar.sizeDelta.y;
-    }
+    private float burnTime;
+    private float maxBurnTime;
 
     public void SetMaxBurnTime(float maxTime)
     {
-        MaxBurnTime = maxTime;
-        BurnTime = maxTime;
-        FillBar.sizeDelta = new Vector2(Width, Height); // starta full
+        maxBurnTime = maxTime;
+        burnTime = maxTime;
+
+        if (FillBar != null)
+        {
+            // Store the original width as full bar
+            maxWidth = FillBar.rect.width;
+            FillBar.localScale = new Vector3(1f, 1f, 1f);
+        }
     }
 
     public void SetBurnTime(float time)
     {
-        BurnTime = Mathf.Clamp(time, 0, MaxBurnTime);
-        float ratio = MaxBurnTime > 0 ? (BurnTime / MaxBurnTime) : 0f;
-        FillBar.sizeDelta = new Vector2(Width * ratio, Height);
+        burnTime = Mathf.Clamp(time, 0, maxBurnTime);
+
+        if (FillBar != null)
+        {
+            // Set fill scale based on ratio
+            float ratio = maxBurnTime > 0 ? (burnTime / maxBurnTime) : 0f;
+            FillBar.localScale = new Vector3(ratio, 1f, 1f);
+        }
     }
 }

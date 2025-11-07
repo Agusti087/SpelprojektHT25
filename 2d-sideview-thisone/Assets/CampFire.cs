@@ -1,116 +1,113 @@
-﻿    using UnityEngine;
+﻿using UnityEngine;
 
-    public class CampFire : MonoBehaviour
+public class CampFire : MonoBehaviour
+{
+    [Header("Campfire Settings")]
+    [SerializeField] private float warmRange = 5f;
+    [SerializeField] private float maxWarmMultiplier = -4f;
+    [SerializeField] private int requiredLogs = 3;
+    [SerializeField] private float burnTime = 30f;
+    [SerializeField] private int maxRefills = 3;
+
+    private int refillCount = 0;
+    private bool isLit = false;
+    private float burnTimer = 0f;
+    private float baselineColdIncrease;
+
+    private MainPlayer player;
+    private FireBarBehaviour fireBar;
+
+    void Awake()
     {
-        [SerializeField] private MainPlayer player;
-        [SerializeField] private float warmRange = 5f;
-        [SerializeField] private float maxWarmMultiplier = -4f;
-        [SerializeField] private int requiredLogs = 3;
-        [SerializeField] private float burnTime = 30f;
-        //[SerializeField] private FireBarBehaviour fireBar;
+        // Find the player automatically
+        if (player == null)
+            player = FindObjectOfType<MainPlayer>();
 
-        [SerializeField] private int maxRefills = 3;
-        private int refillCount = 0;
+        if (player != null)
+            baselineColdIncrease = player.ColdIncrease;
 
-        private bool isLit = false;
-        private float burnTimer = 0f;
-        private float baselineColdIncrease;
+        // Find FireBar in scene
+        fireBar = FindObjectOfType<FireBarBehaviour>();
+        if (fireBar != null)
+            fireBar.SetMaxBurnTime(burnTime);
+        else
+            Debug.LogError("FireBarBehaviour not found in the scene!");
+    }
 
-        public void SetPlayer(MainPlayer player)
+    void Update()
+    {
+        if (player == null) return;
+
+        float distance = Vector3.Distance(transform.position, player.transform.position);
+
+        // Interact with campfire
+        if (Input.GetKeyDown(KeyCode.Q) && distance <= warmRange)
         {
-            this.player = player;
-        }
-
-        public MainPlayer Player => player;
-
-        private FireBarBehaviour fireBar;
-
-        void Start()
-        {
-            // Find the FireHealth object in the scene
-            GameObject fireHealthObj = GameObject.Find("FireHealth");
-            if (fireHealthObj != null)
-            {
-                fireBar = fireHealthObj.GetComponent<FireBarBehaviour>();
-                if (fireBar != null)
-                    fireBar.SetMaxBurnTime(burnTime);
-                else
-                    Debug.LogError("FireHealth object does not have a FireBarBehaviour!");
-            }
+            if (!isLit)
+                TryLightFire();
             else
-            {
-                Debug.LogError("FireHealth object not found in the scene!");
-            }
-
-            baselineColdIncrease = player != null ? player.ColdIncrease : 1f;
+                TryAddLogs();
         }
 
-
-        void Update()
+        // Burn timer
+        if (isLit)
         {
-            float distance = Vector3.Distance(transform.position, player.transform.position);
-
-            if (Input.GetKeyDown(KeyCode.Q) && distance <= warmRange)
+            burnTimer -= Time.deltaTime;
+            if (burnTimer <= 0f)
             {
-                if (!isLit)
-                    TryLightFire();
-                else
-                    TryAddLogs();
-            }
-
-            if (isLit)
-            {
-                burnTimer -= Time.deltaTime;
-                if (burnTimer <= 0f)
-                {
-                    isLit = false;
-                    burnTimer = 0f;
-                }
-            }
-
-            if (isLit && distance <= warmRange)
-                player.ColdIncrease = maxWarmMultiplier;
-            else
-                player.ColdIncrease = baselineColdIncrease;
-
-            fireBar?.SetBurnTime(burnTimer);
-        }
-
-        private void TryLightFire()
-        {
-            if (player.Logs >= requiredLogs)
-            {
-                player.Logs -= requiredLogs;
-                isLit = true;
-                burnTimer = burnTime;
-                fireBar?.SetMaxBurnTime(burnTime);
-                refillCount = 0;
+                isLit = false;
+                burnTimer = 0f;
             }
         }
 
-        private void TryAddLogs()
+        // Apply warm effect
+        if (isLit && distance <= warmRange)
+            player.ColdIncrease = maxWarmMultiplier;
+        else
+            player.ColdIncrease = baselineColdIncrease;
+
+        // Update the bar
+        if (fireBar != null)
+            fireBar.SetBurnTime(burnTimer);
+    }
+
+    private void TryLightFire()
+    {
+        if (player.Logs >= requiredLogs)
         {
-            if (refillCount >= maxRefills)
-            {
-                Destroy(gameObject);
-                return;
-            }
+            player.Logs -= requiredLogs;
+            isLit = true;
+            burnTimer = burnTime;
+            refillCount = 0;
 
-            if (player.Logs <= 0 && requiredLogs > 0)
-                return;
-
-            if (player.Logs > 0)
-                player.Logs--;
-
-            float addedBurnTime = burnTime / Mathf.Max(1, requiredLogs);
-            burnTimer += addedBurnTime;
-            burnTimer = Mathf.Min(burnTimer, burnTime);
-
-            if (!isLit && burnTimer > 0f)
-                isLit = true;
-
-            fireBar?.SetBurnTime(burnTimer);
-
-            refillCount++;
+            if (fireBar != null)
+                fireBar.SetMaxBurnTime(burnTime);
         }
     }
+
+    private void TryAddLogs()
+    {
+        if (refillCount >= maxRefills)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
+        if (player.Logs <= 0)
+            return;
+
+        player.Logs--;
+
+        float addedBurnTime = burnTime / Mathf.Max(1, requiredLogs);
+        burnTimer += addedBurnTime;
+        burnTimer = Mathf.Min(burnTimer, burnTime);
+
+        if (!isLit && burnTimer > 0f)
+            isLit = true;
+
+        if (fireBar != null)
+            fireBar.SetBurnTime(burnTimer);
+
+        refillCount++;
+    }
+}

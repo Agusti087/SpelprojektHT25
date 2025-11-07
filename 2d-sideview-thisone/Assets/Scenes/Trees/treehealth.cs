@@ -4,12 +4,14 @@ public class treehealth : MonoBehaviour
 {
     public int health = 10;
     public bool Collided;
-    public int logsGiven = 5; 
-    private MainPlayer player;
+    MainPlayer player;
 
+   
+    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         player = FindAnyObjectByType<MainPlayer>();
+        
     }
 
     void Update()
@@ -18,11 +20,13 @@ public class treehealth : MonoBehaviour
         {
             GiveLogsToPlayer();
             Destroy(gameObject);
+            player.Logs += 5;
+            
         }
 
         if (Collided && Input.GetKeyDown(KeyCode.F))
         {
-            health -= 5;
+            health -= player.AxeDamage;
         }
     }
 

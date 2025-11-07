@@ -1,13 +1,17 @@
 using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
 
 public class MainPlayer : MonoBehaviour
 {
-    [Header("Cold Settings")]
-    public float Cold;
-    public float MaxCold = 100f;
-    public float ColdIncrease = 1f;
-    public float Logs = 0;
+    public float Cold, MaxCold, ColdIncrease;
+    public int Logs;
     [SerializeField] private BarBehaviour ColdBar;
+    [SerializeField] TMP_Text LogText;
+    [SerializeField] public int AxeDamage;
+    [SerializeField] public int CampfireCost;
+
+    
 
     [Header("Cold Timing")]
     public float ColdChangeInterval = 2f;
@@ -27,10 +31,16 @@ public class MainPlayer : MonoBehaviour
             ColdBar.SetMaxCold(MaxCold);
     }
 
-    void Update()
+    public void Update()
     {
-        HandleCold();
-        //HandleCampfireBuild();
+        Cold += ColdIncrease * Time.deltaTime;
+        Cold = Mathf.Clamp(Cold, 0, MaxCold);
+        ColdBar.SetCold(Cold);
+        LogText.text = $"{Logs}";
+        if (Cold >= MaxCold)
+        {
+            Die();
+        }
     }
 
     private void HandleCold()
@@ -87,3 +97,4 @@ public class MainPlayer : MonoBehaviour
         //}
     //}
 }
+

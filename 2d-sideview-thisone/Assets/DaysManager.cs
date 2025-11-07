@@ -2,19 +2,28 @@ using UnityEngine;
 
 public class DaysManager : MonoBehaviour
 {
-    public int Days;
+    public int Days = 0;
+    public bool isDay = true;
     private float timer = 0f;
-    private float interval = 300f;
+    private float cycleDuration = 300f;
 
     void Update()
     {
         timer += Time.deltaTime;
 
-        if (timer >= interval)
+        if (timer >= cycleDuration)
         {
-            Days++;
+            isDay = !isDay;
             timer = 0f;
-            Debug.Log("Days: " + Days);
+
+            if (isDay)
+            {
+                Days++;
+            }
+            else
+            {
+
+            }
         }
     }
 }

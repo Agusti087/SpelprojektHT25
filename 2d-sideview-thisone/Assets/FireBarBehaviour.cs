@@ -10,7 +10,6 @@ public class FireBarBehaviour : MonoBehaviour
     {
         if (FillBar == null)
         {
-            Debug.LogError("FillBar saknas i FireBarBehaviour!");
             return;
         }
 

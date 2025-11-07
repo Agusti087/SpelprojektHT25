@@ -2,28 +2,45 @@
 
 public class CampFire : MonoBehaviour
 {
-    [SerializeField] private MainPlayer player;
+    [Header("Campfire Settings")]
     [SerializeField] private float warmRange = 5f;
-    [SerializeField] private float maxWarmMultiplier = -4f; // konstant värmeeffekt
+    [SerializeField] private float maxWarmMultiplier = -4f;
     [SerializeField] private int requiredLogs = 3;
     [SerializeField] private float burnTime = 30f;
-    [SerializeField] private FireBarBehaviour fireBar;
+    [SerializeField] private int maxRefills = 3;
 
+    private int refillCount = 0;
     private bool isLit = false;
     private float burnTimer = 0f;
-    private float baselineColdIncrease; // konstant referensvärde
+    private float baselineColdIncrease;
 
-    void Start()
+    private MainPlayer player;
+    private FireBarBehaviour fireBar;
+
+    void Awake()
     {
-        baselineColdIncrease = player.ColdIncrease; // spara spelarens baseline
-        fireBar?.SetMaxBurnTime(burnTime);
+        // Find the player automatically
+        if (player == null)
+            player = FindObjectOfType<MainPlayer>();
+
+        if (player != null)
+            baselineColdIncrease = player.ColdIncrease;
+
+        // Find FireBar in scene
+        fireBar = FindObjectOfType<FireBarBehaviour>();
+        if (fireBar != null)
+            fireBar.SetMaxBurnTime(burnTime);
+        else
+            Debug.LogError("FireBarBehaviour not found in the scene!");
     }
 
     void Update()
     {
+        if (player == null) return;
+
         float distance = Vector3.Distance(transform.position, player.transform.position);
 
-        // Tänd eller lägg på ved
+        // Interact with campfire
         if (Input.GetKeyDown(KeyCode.Q) && distance <= warmRange)
         {
             if (!isLit)
@@ -32,7 +49,7 @@ public class CampFire : MonoBehaviour
                 TryAddLogs();
         }
 
-        // Nedbränning
+        // Burn timer
         if (isLit)
         {
             burnTimer -= Time.deltaTime;
@@ -43,17 +60,15 @@ public class CampFire : MonoBehaviour
             }
         }
 
-        // Värmeeffekt – konstant när elden är tänd
+        // Apply warm effect
         if (isLit && distance <= warmRange)
-        {
             player.ColdIncrease = maxWarmMultiplier;
-        }
         else
-        {
             player.ColdIncrease = baselineColdIncrease;
-        }
 
-        fireBar?.SetBurnTime(burnTimer);
+        // Update the bar
+        if (fireBar != null)
+            fireBar.SetBurnTime(burnTimer);
     }
 
     private void TryLightFire()
@@ -63,19 +78,26 @@ public class CampFire : MonoBehaviour
             player.Logs -= requiredLogs;
             isLit = true;
             burnTimer = burnTime;
-            fireBar?.SetMaxBurnTime(burnTime);
+            refillCount = 0;
+
+            if (fireBar != null)
+                fireBar.SetMaxBurnTime(burnTime);
         }
     }
 
     private void TryAddLogs()
     {
-        if (player.Logs <= 0 && requiredLogs > 0)
+        if (refillCount >= maxRefills)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
+        if (player.Logs <= 0)
             return;
 
-        if (player.Logs > 0)
-            player.Logs--;
+        player.Logs--;
 
-        // Lägg på en fast mängd burnTime per ved istället för multipel baserat på FireStrength
         float addedBurnTime = burnTime / Mathf.Max(1, requiredLogs);
         burnTimer += addedBurnTime;
         burnTimer = Mathf.Min(burnTimer, burnTime);
@@ -83,6 +105,9 @@ public class CampFire : MonoBehaviour
         if (!isLit && burnTimer > 0f)
             isLit = true;
 
-        fireBar?.SetBurnTime(burnTimer);
+        if (fireBar != null)
+            fireBar.SetBurnTime(burnTimer);
+
+        refillCount++;
     }
 }

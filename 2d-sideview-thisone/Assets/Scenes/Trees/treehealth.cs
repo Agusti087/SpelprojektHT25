@@ -4,41 +4,37 @@ public class treehealth : MonoBehaviour
 {
     public int health = 10;
     public bool Collided;
-    MainPlayer player;
+    public int logsGiven = 5; // How many logs this tree gives
+    private MainPlayer player; // Reference to player
 
-   
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        // Find the player automatically (optional: assign manually in Inspector)
         player = FindAnyObjectByType<MainPlayer>();
-        
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (health <= 0)
         {
+            GiveLogsToPlayer();
             Destroy(gameObject);
-            player.Logs += 5;
-            
         }
-        if (Collided == true && Input.GetKeyDown(KeyCode.F))
+
+        if (Collided && Input.GetKeyDown(KeyCode.F))
         {
-            health -= player.AxeDamage;
+            health -= 5;
         }
     }
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.CompareTag("axe"))
         {
             Collided = true;
         }
-       /* else
-        {
-            TreeCollision();
-        }*/
     }
+
     private void OnTriggerExit2D(Collider2D collision)
     {
         if (collision.CompareTag("axe"))
@@ -46,11 +42,17 @@ public class treehealth : MonoBehaviour
             Collided = false;
         }
     }
-    void TreeCollision()
+
+    private void GiveLogsToPlayer()
     {
-        
-            Collided = false;
-        
+        if (player != null)
+        {
+            player.Logs += logsGiven;
+            Debug.Log("Player gained " + logsGiven + " logs! Total: " + player.Logs);
+        }
+        else
+        {
+            Debug.LogWarning("No player found to give logs to!");
+        }
     }
 }
-

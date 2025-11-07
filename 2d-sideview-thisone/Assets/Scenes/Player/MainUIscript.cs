@@ -8,19 +8,17 @@ public class MainUIscript : MonoBehaviour
     [SerializeField] private Button settingsButton;       // Din befintliga settings-knapp
 
     [Header("Settings Screen")]
-    [SerializeField] private GameObject settingsScreen;   // Den nya settings-skärmen
-    [SerializeField] private Button backButton;           // Back-knapp på settings
+    [SerializeField] private GameObject settingsScreen;
+    
 
     private bool menuVisible = false;
 
     void Start()
     {
-        // Koppla knappar
-        settingsButton.onClick.AddListener(OpenSettingsScreen);
-        backButton.onClick.AddListener(CloseSettingsScreen);
+        
 
-        // Dölj settings-skärmen i början
-        settingsScreen.SetActive(false);
+        
+        
     }
 
     void Update()

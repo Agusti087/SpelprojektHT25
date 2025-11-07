@@ -23,7 +23,6 @@ public class MainPlayer : MonoBehaviour
         Cold += ColdIncrease * Time.deltaTime;
         Cold = Mathf.Clamp(Cold, 0, MaxCold);
         ColdBar.SetCold(Cold);
-        LogText.text = $"{Logs}";
         if (Cold >= MaxCold)
         {
             Die();

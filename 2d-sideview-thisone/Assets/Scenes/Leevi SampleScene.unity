@@ -7391,7 +7391,7 @@ MonoBehaviour:
   maxWarmMultiplier: -4
   requiredLogs: 3
   burnTime: 30
-  maxRefills: 3
+  maxRefills: 999999999
 --- !u!58 &1370478286
 CircleCollider2D:
   m_ObjectHideFlags: 0
